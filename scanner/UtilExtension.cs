@@ -18,11 +18,8 @@ namespace scanner
 
             public static object? SetProperty(this Control ctrl, string name, params object[] args)
             {
-                return ctrl.GetType().InvokeMember(name,
-                    BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.SetProperty,
-                    null,
-                    ctrl,
-                    args);
+                var flags = BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.SetProperty;
+                return ctrl.GetType().InvokeMember(name, flags, null, ctrl, args);
             }
         }
 

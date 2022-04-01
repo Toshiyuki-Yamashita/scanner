@@ -1,7 +1,7 @@
-using Windows.Devices.Bluetooth.Advertisement;
-using Windows.Devices.Enumeration;
 using System.ComponentModel;
 using Windows.Devices.Bluetooth;
+using Windows.Devices.Bluetooth.Advertisement;
+using Windows.Devices.Enumeration;
 
 namespace scanner
 {
@@ -32,7 +32,7 @@ namespace scanner
                 }
             }
         }
-        
+
         public Form1()
         {
             InitializeComponent();
@@ -46,7 +46,7 @@ namespace scanner
 
             deviceWatcher = DeviceInformation.CreateWatcher(
                 BluetoothLEDevice.GetDeviceSelectorFromPairingState(false),
-                new string[]{ "System.Devices.Aep.DeviceAddress", "System.Devices.Aep.IsConnected"},
+                new string[] { "System.Devices.Aep.DeviceAddress", "System.Devices.Aep.IsConnected" },
                 DeviceInformationKind.AssociationEndpoint);
             deviceWatcher.Added += DeviceWatcher_Added;
             deviceWatcher.Updated += DeviceWatcher_Updated;
@@ -70,7 +70,7 @@ namespace scanner
         {
             if (await BluetoothLEDevice.FromIdAsync(args.Id) is BluetoothLEDevice btdev)
             {
-                add_data(new DeviceEntity("Updated",btdev));
+                add_data(new DeviceEntity("Updated", btdev));
             }
         }
 
@@ -78,11 +78,11 @@ namespace scanner
         {
             if (await BluetoothLEDevice.FromIdAsync(args.Id) is BluetoothLEDevice btdev)
             {
-                add_data(new DeviceEntity("Added",btdev));
+                add_data(new DeviceEntity("Added", btdev));
             }
         }
 
-        private  void OnReceived(BluetoothLEAdvertisementWatcher sender, BluetoothLEAdvertisementReceivedEventArgs ev)
+        private void OnReceived(BluetoothLEAdvertisementWatcher sender, BluetoothLEAdvertisementReceivedEventArgs ev)
         {
             add_data(new AdvertiseEntity(ev));
         }
@@ -164,7 +164,7 @@ namespace scanner
             if (logpath.Text != String.Empty)
             {
                 path = logpath.Text;
-                
+
             }
             connection = new SQLiteConnection(path);
             connection.CreateTable<AdvertiseEntity>();

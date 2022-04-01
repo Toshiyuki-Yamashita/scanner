@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Windows.Devices.Bluetooth;
-using Windows.Devices.Bluetooth.Advertisement;
+﻿using Windows.Devices.Bluetooth;
 using Windows.Devices.Enumeration;
 
 namespace scanner
@@ -26,7 +20,7 @@ namespace scanner
 
         }
 
-        public DeviceEntity(string operation , BluetoothLEDevice bt)
+        public DeviceEntity(string operation, BluetoothLEDevice bt)
         {
             Name = bt.Name;
             BluetoothAddressType = bt.BluetoothAddressType;
