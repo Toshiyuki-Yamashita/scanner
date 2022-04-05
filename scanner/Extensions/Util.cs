@@ -2,9 +2,9 @@
 
 namespace scanner
 {
-    namespace Util
+    namespace Extensions
     {
-        internal static class Extension
+        internal static class Util
         {
             public static string ToMacAddressString(this ulong addr)
             {

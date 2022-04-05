@@ -2,11 +2,12 @@ using System.ComponentModel;
 using Windows.Devices.Bluetooth;
 using Windows.Devices.Bluetooth.Advertisement;
 using Windows.Devices.Enumeration;
+using scanner.Entity;
 
 namespace scanner
 {
     using SQLite;
-    using Util;
+    using Extensions;
     public partial class Form1 : Form
     {
         private BluetoothLEAdvertisementWatcher advertiseWatcher;
