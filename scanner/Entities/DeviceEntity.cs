@@ -11,6 +11,7 @@ namespace scanner
             [SQLite.AutoIncrement, SQLite.PrimaryKey]
             public int id { get; set; }
             public string Name { get; set; } = string.Empty;
+            public string Memo { get; set; } = string.Empty;
             public BluetoothAddressType BluetoothAddressType { get; set; } = BluetoothAddressType.Unspecified;
             public string BluetoothAddress { get; set; } = "";
             public BluetoothConnectionStatus ConnectionStatus { get; set; }
@@ -22,9 +23,10 @@ namespace scanner
 
             }
 
-            public DeviceEntity(string operation, BluetoothLEDevice bt)
+            public DeviceEntity(string memo, string operation, BluetoothLEDevice bt)
             {
                 Name = bt.Name;
+                Memo = memo;
                 BluetoothAddressType = bt.BluetoothAddressType;
                 BluetoothAddress = bt.BluetoothAddress.ToMacAddressString();
                 ConnectionStatus = bt.ConnectionStatus;

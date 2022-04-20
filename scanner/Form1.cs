@@ -63,7 +63,7 @@ namespace scanner
         {
             if (await BluetoothLEDevice.FromIdAsync(args.Id) is BluetoothLEDevice btdev)
             {
-                add_data(new DeviceEntity("Removed", btdev));
+                add_data(new DeviceEntity(memo.Text, "Removed", btdev));
             }
         }
 
@@ -71,7 +71,7 @@ namespace scanner
         {
             if (await BluetoothLEDevice.FromIdAsync(args.Id) is BluetoothLEDevice btdev)
             {
-                add_data(new DeviceEntity("Updated", btdev));
+                add_data(new DeviceEntity(memo.Text, "Updated", btdev));
             }
         }
 
@@ -79,13 +79,13 @@ namespace scanner
         {
             if (await BluetoothLEDevice.FromIdAsync(args.Id) is BluetoothLEDevice btdev)
             {
-                add_data(new DeviceEntity("Added", btdev));
+                add_data(new DeviceEntity(memo.Text, "Added", btdev));
             }
         }
 
         private void OnReceived(BluetoothLEAdvertisementWatcher sender, BluetoothLEAdvertisementReceivedEventArgs ev)
         {
-            add_data(new AdvertiseEntity(ev));
+            add_data(new AdvertiseEntity(memo.Text, ev));
         }
 
         private void log_Click(object sender, EventArgs e)

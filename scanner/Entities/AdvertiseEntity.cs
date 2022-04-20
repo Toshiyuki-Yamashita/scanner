@@ -13,6 +13,7 @@ namespace scanner
             public int id { get; set; }
             public DateTimeOffset TimeStamp;
             public string Name { get; set; } = "";
+            public string Memo { get; set; } = "";
             public string CompanyId { get; set; } = "";
             public BluetoothLEAdvertisementType AdvertisementType { get; set; } = BluetoothLEAdvertisementType.ConnectableDirected;
             public BluetoothAddressType BluetoothAddressType { get; set; } = BluetoothAddressType.Unspecified;
@@ -30,10 +31,11 @@ namespace scanner
 
             }
 
-            public AdvertiseEntity(BluetoothLEAdvertisementReceivedEventArgs data)
+            public AdvertiseEntity(string memo, BluetoothLEAdvertisementReceivedEventArgs data)
             {
                 TimeStamp = data.Timestamp;
                 Name = data.Advertisement.LocalName;
+                Memo = memo;
                 if (data.Advertisement.ManufacturerData.FirstOrDefault() is BluetoothLEManufacturerData md)
                 {
                     CompanyId = md.CompanyId.ToString("X4");
