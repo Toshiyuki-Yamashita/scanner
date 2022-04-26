@@ -2,7 +2,7 @@ using System.ComponentModel;
 using Windows.Devices.Bluetooth;
 using Windows.Devices.Bluetooth.Advertisement;
 using Windows.Devices.Enumeration;
-using scanner.Entity;
+using scanner.Data.Entities;
 
 namespace scanner
 {
@@ -14,7 +14,7 @@ namespace scanner
         private DeviceWatcher deviceWatcher;
         private BindingList<AdvertiseEntity> advertise;
         private BindingList<DeviceEntity> device;
-        private SQLiteConnection? connection = null;
+        private SQLiteAsyncConnection? connection = null;
         bool IsStarted
         {
             get
@@ -63,7 +63,7 @@ namespace scanner
         {
             if (await BluetoothLEDevice.FromIdAsync(args.Id) is BluetoothLEDevice btdev)
             {
-                add_data(new DeviceEntity(memo.Text, "Removed", btdev));
+                add_data(new DeviceEntity(memo.Text, "Removed", btdev), device);
             }
         }
 
@@ -71,7 +71,7 @@ namespace scanner
         {
             if (await BluetoothLEDevice.FromIdAsync(args.Id) is BluetoothLEDevice btdev)
             {
-                add_data(new DeviceEntity(memo.Text, "Updated", btdev));
+                add_data(new DeviceEntity(memo.Text, "Updated", btdev), device);
             }
         }
 
@@ -79,13 +79,13 @@ namespace scanner
         {
             if (await BluetoothLEDevice.FromIdAsync(args.Id) is BluetoothLEDevice btdev)
             {
-                add_data(new DeviceEntity(memo.Text, "Added", btdev));
+                add_data(new DeviceEntity(memo.Text, "Added", btdev), device);
             }
         }
 
         private void OnReceived(BluetoothLEAdvertisementWatcher sender, BluetoothLEAdvertisementReceivedEventArgs ev)
         {
-            add_data(new AdvertiseEntity(memo.Text, ev));
+            add_data(new AdvertiseEntity(memo.Text, ev), advertise);
         }
 
         private void log_Click(object sender, EventArgs e)
@@ -97,59 +97,30 @@ namespace scanner
                 logpath.Text = dialog.FileName;
             }
         }
-        private void add_data(DeviceEntity entity)
+        
+        private  void add_data<Entity>(Entity entity, BindingList<Entity> db) where Entity : notnull
         {
             if (IsDisposed) return;
             if (InvokeRequired)
             {
                 try
                 {
-                    Invoke((Action)(() => { add_data(entity); }));
+                    BeginInvoke((Action)(() => { add_data(entity, db); }));
                 }
                 catch
                 {
                     // do nothing 
                 }
+                return;
             }
             else
             {
-                if (device.Count >= 100)
+                connection?.InsertAsync(entity);
+                if (db.Count >= 100)
                 {
-                    advertise.RemoveAt(0);
+                    db.RemoveAt(0);
                 }
-                device.Add(entity);
-                if (connection is SQLiteConnection)
-                {
-                    connection.Insert(entity);
-                }
-            }
-
-        }
-        private void add_data(AdvertiseEntity entity)
-        {
-            if (IsDisposed) return;
-            if (InvokeRequired)
-            {
-                try
-                {
-                    Invoke((Action)(() => { add_data(entity); }));
-                }
-                catch
-                {
-                    // do nothing 
-                }
-            }
-            else
-            {
-                if (advertise.Count >= 100)
-                {
-                    advertise.RemoveAt(0);
-                }
-                advertise.Add(entity);
-                if (connection is SQLiteConnection)
-                {
-                    connection.Insert(entity);
-                }
+                db.Add(entity);
             }
         }
 
@@ -157,7 +128,7 @@ namespace scanner
         {
             IsStarted = !IsStarted;
         }
-        private void start_watcher()
+        private async void start_watcher()
         {
             if (IsStarted) return;
 
@@ -167,9 +138,10 @@ namespace scanner
                 path = logpath.Text;
 
             }
-            connection = new SQLiteConnection(path);
-            connection.CreateTable<AdvertiseEntity>();
-            connection.CreateTable<DeviceEntity>();
+            connection = new SQLiteAsyncConnection(path, storeDateTimeAsTicks:false) ;
+            var createadv = connection.CreateTableAsync<AdvertiseEntity>();
+            var createdev = connection.CreateTableAsync<DeviceEntity>();
+            await Task.WhenAll(createadv, createdev);
             advertiseWatcher.Start();
             deviceWatcher.Start();
         }
@@ -179,16 +151,18 @@ namespace scanner
             if (!IsStarted) return;
             advertiseWatcher.Stop();
             deviceWatcher.Stop();
-            if (connection is SQLiteConnection)
-            {
-                connection.Close();
-                connection = null;
-            }
+
         }
 
-        private void Form1_FormClosed(object sender, FormClosedEventArgs e)
+        private async  void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {
             IsStarted = false;
+            
+            if (connection is SQLiteAsyncConnection)
+            {
+                await connection.CloseAsync();
+                connection = null;
+            }
         }
     }
 }
