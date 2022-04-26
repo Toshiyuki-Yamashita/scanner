@@ -9,7 +9,7 @@
   <Identity
     Name="2f1b2af2-3399-4350-b0d0-4a602e12a3e7"
     Publisher="CN=e09485"
-    Version="1.0.7.0" />
+    Version="1.0.8.0" />
 
   <Properties>
     <DisplayName>ble-scanner</DisplayName>
