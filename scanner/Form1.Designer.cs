@@ -28,17 +28,19 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.panel1 = new System.Windows.Forms.Panel();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.logpath = new System.Windows.Forms.Label();
             this.log = new System.Windows.Forms.Button();
-            this.start = new System.Windows.Forms.Button();
             this.memo = new System.Windows.Forms.TextBox();
+            this.start = new System.Windows.Forms.Button();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.dataGridView2 = new System.Windows.Forms.DataGridView();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.panel1.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -91,6 +93,14 @@
             this.log.UseVisualStyleBackColor = true;
             this.log.Click += new System.EventHandler(this.log_Click);
             // 
+            // memo
+            // 
+            this.memo.Location = new System.Drawing.Point(741, 3);
+            this.memo.Name = "memo";
+            this.memo.Size = new System.Drawing.Size(125, 27);
+            this.memo.TabIndex = 3;
+            this.memo.Text = "memo";
+            // 
             // start
             // 
             this.start.Location = new System.Drawing.Point(871, 2);
@@ -101,14 +111,6 @@
             this.start.Text = "Start";
             this.start.UseVisualStyleBackColor = true;
             this.start.Click += new System.EventHandler(this.start_Click);
-            // 
-            // memo
-            // 
-            this.memo.Location = new System.Drawing.Point(741, 3);
-            this.memo.Name = "memo";
-            this.memo.Size = new System.Drawing.Size(125, 27);
-            this.memo.TabIndex = 3;
-            this.memo.Text = "memo";
             // 
             // tabControl1
             // 
@@ -209,5 +211,6 @@
         private TabPage tabPage2;
         private DataGridView dataGridView1;
         private TextBox memo;
+        private System.Windows.Forms.Timer timer1;
     }
 }
